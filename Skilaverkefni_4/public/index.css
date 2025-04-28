@@ -1,0 +1,50 @@
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+#main {
+    display: flex;
+    height: 100vh;
+}
+
+#userList-container {
+    width: 15%;
+    padding: 10px;
+    border-left: 1px solid black;
+    background-color: #f7f7f7;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+#chat-container {
+    width: 85%;
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+#messages {
+    list-style: none;
+    padding: 0;
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-bottom: 10px;
+}
+
+#form {
+    display: flex;
+}
+
+#input {
+    flex: 1;
+    padding: 8px;
+}
+
+button {
+    padding: 8px 12px;
+}
