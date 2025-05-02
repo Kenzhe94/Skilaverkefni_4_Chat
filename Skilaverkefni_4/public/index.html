@@ -28,6 +28,10 @@
         <div id="userList-container">
             <h4>Active users: <span id="activeListNum">0</span></h4>
             <ul id="activeListUser"></ul>
+            <div id="filterUserContainer">
+                <input id="filterUserText" autocomplete="off"><button id="filterUserTakki">Filter</button>
+                <button id="synaHistory">Syna History</button>            
+            </div>
         </div>
     </div>
     
@@ -55,7 +59,17 @@
             messages.appendChild(item);
             window.scrollTo(0, document.body.scrollHeight);
         });
-        
+        document.getElementById('filterUserTakki').addEventListener('click', ()=> {
+            messages.innerHTML = '';
+            let input_user = document.getElementById('filterUserText').value;
+            socket.emit('filter', input_user);
+            input_user = "";
+        })
+        document.getElementById('synaHistory').addEventListener('click', ()=>{ 
+            messages.innerHTML = '';
+            socket.emit('synaHist');
+        })
+
         socket.on('user list', (users) => {
             const userList = document.getElementById('activeListUser');
             const userCount = document.getElementById('activeListNum');

@@ -44,8 +44,24 @@ MongoClient.connect('mongodb://127.0.0.1/MongoChat', {useUnifiedTopology: true},
         // þegar sent er skilaboð
         socket.on('chat message', (msg) => {
             io.emit('chat message',getCurrentTime() + socket.userName+" skrifaði : "+ msg);
-            //
-            chatdb.collection("messages").insertOne({msg:getCurrentTime()+socket.userName+" skrifaði : "+ msg});
+            chatdb.collection("messages").insertOne({msg:getCurrentTime()+socket.userName+" skrifaði : "+ msg, user: socket.userName});
+        });
+        // þegar það er ýtt á takka til að filtera history.
+        socket.on('filter', (user)=>{
+            chatdb.collection("messages").find({user:user}, {projection:{_id:0, msg:1}}).toArray(function(err, result){
+                if (err) throw err;
+                result.forEach(element => {
+                    socket.emit('chat message', element.msg);
+                });
+            });
+        });
+        socket.on('synaHist', ()=>{
+            chatdb.collection("messages").find({}, {projection:{_id:0, msg:1}}).toArray(function(err, result){
+                if (err) throw err;
+                result.forEach(element => {
+                    socket.emit('chat message', element.msg);
+                });
+            });
         });
         // notandi hættir
         socket.on('disconnect', () => {
@@ -61,7 +77,6 @@ MongoClient.connect('mongodb://127.0.0.1/MongoChat', {useUnifiedTopology: true},
             //uppfæra html listan af notendur sem eru í chatið
             io.emit('user list', listUserName)
         });
-        
     });
 });
 // tenging við chatið
